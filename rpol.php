@@ -82,6 +82,7 @@ if ( $run_curl ) {
 	$content = curl_exec($ch);
 
 	$postData = "gi=" . $rpol_curl['gi'];
+	$postData .= ( $rpol_curl['markread'] ) ? "&markread=" . $rpol_curl['markread'] : "";
 	$postData .= ( $rpol_curl['priv'] ) ? "&priv=" . $rpol_curl['priv'] : "";
 	$postData .= ( $rpol_curl['ti'] ) ? "&ti=" . $rpol_curl['ti'] : "";
 	$postData .= ( $rpol_curl['ci'] ) ? "&ci=" . $rpol_curl['ci'] : "";
