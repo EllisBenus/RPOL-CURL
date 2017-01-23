@@ -29,6 +29,25 @@ foreach ( $_GET as $key=>$element ) {
 $run_curl = TRUE;
 //$run_curl = FALSE; // UNCOMMENT to not run CURL request
 
+
+/*
+ * Save HTML to a file to reference and avoid the 504 gateway error_get_last
+ * 
+ * 1) Uncomment this code.
+ * 2) Load the page you want to work on with this script.
+ * 3) The file is saved in your directory.
+ * 4) Comment out this code
+ * 5) Uncomment the $run_curl = FALSE; above to have the script reference that file.
+ 
+$file = 'rpol.txt';
+// Open the file to get existing content
+$current = file_get_contents($file);
+// Append a new person to the file
+$current = $content;
+// Write the contents back to the file
+file_put_contents($file, $current);
+ */
+
 if ( $run_curl ) {
 	// init the resource
 	$ch = curl_init();
@@ -79,7 +98,7 @@ if ( $run_curl ) {
  * Open saved HTML file for use while testing to avoid being blocked from rpol.net for repeated requests
  */
 if ( $run_curl == FALSE ) {
-	$file = '../rpol.txt';
+	$file = 'rpol.txt';
 	$content = file_get_contents($file);
 }
  
@@ -213,212 +232,5 @@ foreach ( $html->find('a') as $rpol_link ) {
 echo $html;
 
 // Close the CURL connection
-// curl_close($ch);
-
-
-// --------------------------------------------------------------------------------------------------------------------
-// --- Everything after this is junk code no longer needed but kept b/c I have no version control on this file --------
-// --------------------------------------------------------------------------------------------------------------------
-
-/*
- * Save HTML to a file to reference and avoid the 504 gateway error_get_last
- *
-$file = 'rpol.txt';
-// Open the file to get existing content
-$current = file_get_contents($file);
-// Append a new person to the file
-$current = $content;
-// Write the contents back to the file
-file_put_contents($file, $current);
- */
- 
- 
-/*
- * Getting the contents of a game thread
- * 
- * example url: http://www.rpol.net/display.cgi?gi=65457&ti=3&date=1482542067
- *
- 
- *
- * Get game's main page
- *
- 
-$postData = "gi=65457&date=1482542067"; 
-curl_setopt($ch, CURLOPT_URL, 'http://www.rpol.net/game.cgi');
-
- *
- * Get a thread in a game
- *
-
-$postData = "gi=65457&ti=3&date=1484469654";
-curl_setopt($ch, CURLOPT_URL, 'http://www.rpol.net/display.cgi');
-
-curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-
-$content = curl_exec($ch);
- */
-
- 
-/*
- * Getting all the Game Links on the homepage after logging in
- *
- 
-$html = str_get_html($content);
-
-foreach($html->find('tr.highlight') as $table) {
-	
-	foreach($table->find('a', 0) as $link) {
-        if ( $link->innertext ) {
-			echo $link->innertext . "<br>\n";
-		}
-	}		
-}
-*/
-
-// Add jQuery to the header
-/*
-$inject  = '<script type="text/javascript">
-$( document ).ready(function() {
-	// Add ID to Table with Thread contents to make selections easier
-    $(".message_alt:first").parent().parent().parent().attr("id", "rpoltable");
-	
-	// Replace all table tags with divs and paragraphs
-	$(\'#rpoltable\').each(function (){
-		$(this).replaceWith( $(this).html()
-			.replace(/<tbody/gi, "<div class=\'table\'")
-			.replace(/<tr/gi, "<div class=\'ccbnOutline\'")
-			.replace(/<\/tr>/gi, "</div>")
-			.replace(/<td/gi, "<div class=\'td\'")
-			.replace(/<\/td>/gi, "</div>")
-			.replace(/<\/tbody/gi, "<\/div")
-		);
-	});	
-	
-	// Replace all table tags with divs and paragraphs
-	// This is the section with the pagination controls
-	$(\'#contents center\').each(function (){
-		$(this).replaceWith( $(this).html()
-			.replace(/<tbody/gi, "<div class=\'table\'")
-			.replace(/<tr/gi, "<div class=\'ccbnOutline\'")
-			.replace(/<\/tr>/gi, "</div>")
-			.replace(/<td/gi, "<div class=\'td\'")
-			.replace(/<\/td>/gi, "</div>")
-			.replace(/<\/tbody/gi, "<\/div")
-		);
-	});	
-	
-	// Replace all table tags in the header with divs and paragraphs
-   $(\'#header\').each(function (){
-		$(this).replaceWith( $(this).html()
-			.replace(/<tbody/gi, "<div")
-			.replace(/<tr/gi, "<div")
-			.replace(/<\/tr>/gi, "</div>")
-			.replace(/<td/gi, "<p")
-			.replace(/<\/td>/gi, "</p>")
-			.replace(/<\/tbody/gi, "<\/div")
-		);
-	});
-	
-	// Replace all table tags in the footer with divs and paragraphs
-	// For some reason when you do this, everythign on the page disappears and only shows the line "Generated in 0.152 seconds."
-   $(\'#header\').each(function (){
-		$(this).replaceWith( $(this).html()
-			.replace(/<tbody/gi, "<div")
-			.replace(/<tr/gi, "<div")
-			.replace(/<\/tr>/gi, "</div>")
-			.replace(/<td/gi, "<p")
-			.replace(/<\/td>/gi, "</p>")
-			.replace(/<\/tbody/gi, "<\/div")
-		);
-	});
-	
-	
-	// Manually adding the .header class to each div that does not already have an ID assigned so the CSS works.
-	$("#wrapper > div").each( function( index ) {
-
-		if ( !$(this).attr("id") ) {
-			$(this).attr("class", "header");
-		}
-	});
-	
-	
-	
-	
-});
-</script>';
-*/
-// $html->find('head', 0)->innertext = $inject.$html->find('head', 0)->innertext;
-
-/*
- * Remove Table Elements with jQuery
- * http://stackoverflow.com/questions/10141856/how-can-i-replace-multiple-tables-into-divs
- * 
- * Should/Could this be done with the Simple PHP DOM instead of jQuery?
- * 
-$('#rpoltable').each(function (){
-	$(this).replaceWith( $(this).html()
-		.replace(/<tbody/gi, "<div class='table'")
-		.replace(/<tr/gi, "<div class='ccbnOutline'")
-		.replace(/<\/tr>/gi, "</div>")
-		.replace(/<td/gi, "<div class='td'")
-		.replace(/<\/td>/gi, "</div>")
-		.replace(/<\/tbody/gi, "<\/div")
-	);
-});
- 
- */
-
-// Just some dev testing to better understand the php simple dom
-//$html->find('div#contents', 0)->innertext;
-//$html->find("div#contents", 0)->find($replace);
-//$es = $html->find('div div div'); 
-//$e = $html->find('ul', 0)->find('li', 0);
-
-/*
- * Replace all instances of table elements with div's
- *
- * NOTE: This currently didn't work as well as the jQuery above. 
- * 			I'm probably doing something wrong.
- *
-$replace="table,tr,td,th";  
-foreach ( $html->find( 'div#contents', 0)->children(1)->find($replace) as $key=>$element ) {
-	$html->find($replace,$key)->outertext="<div>".$element->innertext."</div>";
-}
- 
-$replace="table,tr,td,th";  
-foreach($html->find($replace) as $key=>$element){
-	//printf("key: %s and element: %s<br>\n", $key, $element);
-	//$html->find($replace,$key)->outertext="<div>".$element->innertext."</div>";
-}
-*/
-/*
-foreach ( $html->find('table') as $key=>$element ) {
-	//$div->outertext = $div->innertext;
-	
-	printf('<p style="margin-bottom: 10px; border-bottom: 1px solid red;">Key: %s and Element %s</p>', $key, $element);
-	echo "\n\n\n";
-	
-	$element = str_replace("table", "div", $element);
-	$element = str_replace("tbody", "div", $element);
-	$element = str_replace("tr", "div", $element);
-	$element = str_replace("td", "div", $element);
-	
-	printf('<p style="margin-bottom: 10px; border-bottom: 1px solid red;">Key: %s and Element %s</p>', $key, $element);
-	echo "\n\n\n";
-}
-*/
-/*
- * I was trying to pull all the header links through the PHP simple dom to spit them out
- * as one list of links, instead of using jQuery do reformat them like I did above.
- *
- * This also didn't work very well... :-(
- 
-$header_links = $html->find('#header a');
-
-$header_links_text = "";
-foreach($header_links as $link) {	
-	$header_links_text .= $link . " ";
-}
-$html->find('#header', 0)->innertext = $header_links_text.$html->find('#header', 0)->innertext;
-*/
+if ( $run_curl ) { curl_close($ch); }
 ?>
