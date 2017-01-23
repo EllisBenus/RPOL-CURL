@@ -82,7 +82,9 @@ if ( $run_curl ) {
 	$content = curl_exec($ch);
 
 	$postData = "gi=" . $rpol_curl['gi'];
+	$postData .= ( $rpol_curl['priv'] ) ? "&priv=" . $rpol_curl['priv'] : "";
 	$postData .= ( $rpol_curl['ti'] ) ? "&ti=" . $rpol_curl['ti'] : "";
+	$postData .= ( $rpol_curl['ci'] ) ? "&ci=" . $rpol_curl['ci'] : "";
 	$postData .= "&date=" . $rpol_curl['date'];
 	$postData .= ( $rpol_curl['msgpage'] ) ? "&msgpage=" . $rpol_curl['msgpage'] : "";
 	$postData .= ( $rpol_curl['show'] ) ? "&show=" . $rpol_curl['show'] : "";
@@ -215,6 +217,7 @@ foreach ( $html->find('a') as $rpol_link ) {
 	if ( strpos( $rpol_link->href, "gameinfo.php" ) ||
 		strpos( $rpol_link->href, "display.cgi" ) ||
 		strpos( $rpol_link->href, "message.cgi" ) ||
+		strpos( $rpol_link->href, "private.cgi" ) ||
 		strpos( $rpol_link->href, "game.cgi" ) ) {
 
 		// Remove the slash before the page so it's a proper $_GET string
