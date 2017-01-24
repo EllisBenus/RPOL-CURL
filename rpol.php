@@ -84,7 +84,8 @@ if ( $run_curl ) {
 	curl_setopt($ch, CURLOPT_URL, 'http://rpol.net/');
 	$content = curl_exec($ch);
 
-	$postData =  ( $rpol_curl['gi'] ) 			? "&gi=" . 			$rpol_curl['gi'] : "";
+	$postData =  ( $rpol_curl['read'] ) 			? "&read=" . 			$rpol_curl['read'] : "";
+	$postData .= ( $rpol_curl['gi'] ) 			? "&gi=" . 			$rpol_curl['gi'] : "";
 	$postData .= ( $rpol_curl['markread'] ) 	? "&markread=" . 	$rpol_curl['markread'] : "";
 	$postData .= ( $rpol_curl['priv'] ) 		? "&priv=" . 		$rpol_curl['priv'] : "";
 	$postData .= ( $rpol_curl['ti'] ) 			? "&ti=" . 			$rpol_curl['ti'] : "";
@@ -243,6 +244,7 @@ foreach ( $html->find('a') as $rpol_link ) {
 		strpos( $rpol_link->href, "display.cgi" ) ||
 		strpos( $rpol_link->href, "message.cgi" ) ||
 		strpos( $rpol_link->href, "private.cgi" ) ||
+		strpos( $rpol_link->href, "rmail.cgi" ) ||
 		strpos( $rpol_link->href, "game.cgi" ) ) {
 
 		// Remove the slash before the page so it's a proper $_GET string
