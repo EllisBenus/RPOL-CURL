@@ -19,6 +19,9 @@ $rpol_curl = array();
 foreach ( $_GET as $key=>$element ) {
 	$rpol_curl[$key] = $element;
 }
+foreach ( $_POST as $key=>$element ) {
+	$rpol_curl_post[$key] = $element;
+}
 
 /* 
  * CURL REQUEST
@@ -81,16 +84,37 @@ if ( $run_curl ) {
 	curl_setopt($ch, CURLOPT_URL, 'http://rpol.net/');
 	$content = curl_exec($ch);
 
-	$postData = "gi=" . $rpol_curl['gi'];
-	$postData .= ( $rpol_curl['markread'] ) ? "&markread=" . $rpol_curl['markread'] : "";
-	$postData .= ( $rpol_curl['priv'] ) ? "&priv=" . $rpol_curl['priv'] : "";
-	$postData .= ( $rpol_curl['ti'] ) ? "&ti=" . $rpol_curl['ti'] : "";
-	$postData .= ( $rpol_curl['ci'] ) ? "&ci=" . $rpol_curl['ci'] : "";
-	$postData .= "&date=" . $rpol_curl['date'];
-	$postData .= ( $rpol_curl['msgpage'] ) ? "&msgpage=" . $rpol_curl['msgpage'] : "";
-	$postData .= ( $rpol_curl['show'] ) ? "&show=" . $rpol_curl['show'] : "";
-	$postData .= ( $rpol_curl['subject'] ) ? "&subject=" . $rpol_curl['subject'] : "";
+	$postData =  ( $rpol_curl['gi'] ) 			? "&gi=" . 			$rpol_curl['gi'] : "";
+	$postData .= ( $rpol_curl['markread'] ) 	? "&markread=" . 	$rpol_curl['markread'] : "";
+	$postData .= ( $rpol_curl['priv'] ) 		? "&priv=" . 		$rpol_curl['priv'] : "";
+	$postData .= ( $rpol_curl['ti'] ) 			? "&ti=" . 			$rpol_curl['ti'] : "";
+	$postData .= ( $rpol_curl['r'] ) 			? "&r=" . 			$rpol_curl['r'] : "";
+	$postData .= ( $rpol_curl['subject'] ) 		? "&subject=" . 	$rpol_curl['subject'] : "";
+	$postData .= ( $rpol_curl['q'] ) 			? "&q=" . 			$rpol_curl['q'] : "";
+	$postData .= ( $rpol_curl['pos'] ) 			? "&pos=" . 		$rpol_curl['pos'] : "";
+	$postData .= ( $rpol_curl['ci'] ) 			? "&ci=" . 			$rpol_curl['ci'] : "";
+	$postData .= ( $rpol_curl['date'] ) 		? "&date=" . 		$rpol_curl['date'] : "";
+	$postData .= ( $rpol_curl['msgpage'] ) 		? "&msgpage=" . 	$rpol_curl['msgpage'] : "";
+	$postData .= ( $rpol_curl['show'] ) 		? "&show=" . 		$rpol_curl['show'] : "";
+	$postData .= ( $rpol_curl['subject'] ) 		? "&subject=" . 	$rpol_curl['subject'] : "";
 
+	// Message.cgi form Post Data
+	if ( $rpol_curl_post ) {		
+		$postDataMessage =  ( $rpol_curl_post['gi'] ) 				? "gi=" . 					$rpol_curl_post['gi'] : "";
+		$postDataMessage .= ( $rpol_curl_post['ti'] ) 				? "&ti=" . 					$rpol_curl_post['ti'] : "";
+		$postDataMessage .= ( $rpol_curl_post['simulpost'] ) 		? "&simulpost=" . 			$rpol_curl_post['simulpost'] : "";
+		$postDataMessage .= ( $rpol_curl_post['ci'] ) 				? "&ci=" . 					$rpol_curl_post['ci'] : "";
+		$postDataMessage .= ( $rpol_curl_post['manualplayername'] )	? "&manualplayername=" .	$rpol_curl_post['manualplayername'] : "";
+		$postDataMessage .= ( $rpol_curl_post['subject'] ) 			? "&subject=" . 			$rpol_curl_post['subject'] : "";
+		$postDataMessage .= ( $rpol_curl_post['messagetext'] ) 		? "&messagetext=" . 		$rpol_curl_post['messagetext'] : "";
+		$postDataMessage .= ( $rpol_curl_post['action'] ) 			? "&action=" . 				$rpol_curl_post['action'] : "";
+		$postDataMessage .= ( $rpol_curl_post['styleselected'] ) 	? "&styleselected=" . 		$rpol_curl_post['styleselected'] : "";
+		$postDataMessage .= ( $rpol_curl_post['personselected'] ) 	? "&personselected=" . 		$rpol_curl_post['personselected'] : "";
+		
+		curl_setopt($ch, CURLOPT_URL, 'http://www.rpol.net/message.cgi');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postDataMessage);
+		curl_exec($ch);
+	}
 
 	curl_setopt($ch, CURLOPT_URL, 'http://www.rpol.net/' . $rpol_curl['page']);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
